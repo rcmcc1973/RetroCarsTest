@@ -1,7 +1,7 @@
 # RetroCarsTest
 Bigcommerce Code Test
 
-## Table of contents
+## Table of Contents
 * [Summary](#summary)
 * [Test Questions](#test-questions)
 * [Notes](#notes)
