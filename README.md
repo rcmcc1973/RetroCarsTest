@@ -1,146 +1,250 @@
-# Cornerstone
-![tests](https://github.com/bigcommerce/cornerstone/workflows/Theme%20Bundling%20Test/badge.svg?branch=master)
+# RetroCarsTest
+Bigcommerce Code Test
 
-Stencil's Cornerstone theme is the building block for BigCommerce theme developers to get started quickly developing premium quality themes on the BigCommerce platform.
+## Table of Contents
+* [Summary](#summary)
+* [Test Questions](#test-questions)
+* [Notes](#notes)
+	* [Product Image Hover](#product-image-hover)
+	* [Add Item to Cart Button](#add-item-to-cart-button)
+	* [Delete Cart Items Button](#delete-cart-items-button)
+	* [Bonus Customer Info](#bonus-customer-info)
 
-### Stencil Utils
-[Stencil-utils](https://github.com/bigcommerce/stencil-utils) is our supporting library for our events and remote interactions.
+## Summary
+This project is a Bigcommerce test for a job opportunity. It involves handlebars and storefront API.  Thanks for the opportuntiy to practice what I already know in Bigcommerce, as well as the opportunity to learn and research new stuff.  
+	
+## Test Questions
 
-## JS API
-When writing theme JavaScript (JS) there is an API in place for running JS on a per page basis. To properly write JS for your theme, the following page types are available to you:
+### Product & Category Setup:
+Create a product called 'Special Item' which will be assigned to a new category called **'Special Items'**. Add 2 images to the new **'Special Item'** product. The 'Special Item' product should be the only item which shows in this category.
 
-* "pages/account/addresses"
-* "pages/account/add-address"
-* "pages/account/add-return"
-* "pages/account/add-wishlist"
-* "pages/account/recent-items"
-* "pages/account/download-item"
-* "pages/account/edit"
-* "pages/account/return-saved"
-* "pages/account/returns"
-* "pages/account/payment-methods"
-* "pages/auth/login"
-* "pages/auth/account-created"
-* "pages/auth/create-account"
-* "pages/auth/new-password"
-* "pages/blog"
-* "pages/blog-post"
-* "pages/brand"
-* "pages/brands"
-* "pages/cart"
-* "pages/category"
-* "pages/compare"
-* "pages/errors"
-* "pages/gift-certificate/purchase"
-* "pages/gift-certificate/balance"
-* "pages/gift-certificate/redeem"
-* "global"
-* "pages/home"
-* "pages/order-complete"
-* "pages/page"
-* "pages/product"
-* "pages/search"
-* "pages/sitemap"
-* "pages/subscribed"
-* "pages/account/wishlist-details"
-* "pages/account/wishlists"
+### Test Items
 
-These page types will correspond to the pages within your theme. Each one of these page types map to an ES6 module that extends the base `PageManager` abstract class.
+1. Create a feature that will show the product's **second image** when it is **hovered** over. 
 
-```javascript
-    export default class Auth extends PageManager {
-        constructor() {
-            // Set up code goes here; attach to internals and use internals as you would 'this'
-        }
-    }
-```
+2. Add a button at the top of the category page labeled **'Add All To Cart'**. When clicked, the product will be added to the cart. Notify the user that the product has been added. 
 
-### JS Template Context Injection
-Occasionally you may need to use dynamic data from the template context within your client-side theme application code.
+3. If the cart has an item in it - show a button next to the **'Add All To Cart'** button which says **'Remove All Items'**. When clicked it should clear the cart and notify the user.
 
-Two helpers are provided to help achieve this.
+**Note:** Both buttons should utilize the Storefront API for completion.
 
-The inject helper allows you to compose a JSON object with a subset of the template context to be sent to the browser.
+4. **Bonus.** If a customer is logged in - at the top of the category page show a banner that shows some customer details **(name, email, and phone)**. This should utilize the data that is rendered via Handlebars on the Customer Object.
+
+	
+## Notes
+
+**Custom.scss** file was used for mobile responsiveness for buttons and customer info test question items.
+
+### Product Image Hover
 
 ```
-{{inject "stringBasedKey" contextValue}}
+.../templates/components/products/card.html
 ```
 
-To retrieve the parsable JSON object, just call `{{jsContext}}` after all of the `{{@inject}}` calls.
-
-For example, to setup the product name in your client-side app, you can do the following if you're in the context of a product:
-
-```html
-{{inject "myProductName" product.title}}
-
-<script>
-// Note the lack of quotes around the jsContext handlebars helper, it becomes a string automatically.
-var jsContext = JSON.parse({{jsContext}}); // jsContext would output "{\"myProductName\": \"Sample Product\"}" which can feed directly into your JavaScript
-
-console.log(jsContext.myProductName); // Will output: Sample Product
-</script>
-```
-
-You can compose your JSON object across multiple pages to create a different set of client-side data depending on the currently loaded template context.
-
-The stencil theme makes the jsContext available on both the active page scoped and global PageManager objects as `this.context`.
-
-## Polyfilling via Feature Detection
-Cornerstone implements [this strategy](https://philipwalton.com/articles/loading-polyfills-only-when-needed/) for polyfilling.
-
-In `templates/components/common/polyfill-script.html` there is a simple feature detection script which can be extended to detect any recent JS features you intend to use in your theme code.
-
-If any one of the conditions is not met, an additional blocking JS bundle configured in `assets/js/polyfills.js` will be loaded to polyfill modern JS features before the main bundle executes. 
-
-This intentionally prioritizes the experience of the 90%+ of shoppers who are on modern browsers in terms of performance, while maintaining compatibility (at the expense of additional JS download+parse for the polyfills) for users on legacy browsers.
-
-## Static assets
-Some static assets in the Stencil theme are handled with Grunt if required. This
-means you have some dependencies on grunt and npm. To get started:
-
-First make sure you have Grunt installed globally on your machine:
+Added this code below using handlebars and quick inline javascript to show second product image when hovered.
 
 ```
-npm install -g grunt-cli
+<img class="card-image lazyload"
+onmouseover="this.src='{{getImage images.[1] img size (cdn default)}}'"
+onmouseout="this.src='{{getImage image 'productgallery_size' (cdn default)}}'"
+data-sizes="auto" src="{{cdn 'img/loading.svg'}}"
+data-src="{{getImage image 'productgallery_size' (cdn theme_settings.default_image_product)}}"
+alt="{{image.alt}}"
+title="{{image.alt}}"
+>
 ```
-
-and run:
-
-```
-npm install
-```
-
-Note: package-lock.json file was generated by Node version 10 and npm version 6.11.3. The app supports Node 10 as well as multiple versions of npm, but we should always use those versions when updating package-lock.json, unless it is decided to upgrade those, and in this case the readme should be updated as well. If using a different version for node OR npm, please delete the package-lock.json file prior to installing node packages and also prior to pushing to github.
-
-If updating or adding a dependency, please double check that you are working on Node version 10 and npm version 6.11.3 and run ```npm update <package_name>```  or ```npm install <package_name>``` (avoid running npm install for updating a package). After updating the package, please make sure that the changes in the package-lock.json reflect only the updated/new package prior to pushing the changes to github.
-
-
-### Icons
-Icons are delivered via a single SVG sprite, which is embedded on the page in
-`templates/layout/base.html`. It is generated via a grunt task `grunt svgstore`.
-
-The task takes individual SVG files for each icon in `assets/icons` and bundles
-them together, to be inlined on the top of the theme, via an ajax call managed
-by svg-injector. Each icon can then be called in a similar way to an inline image via:
+Commented out Quick View Button, and edited and moved Add to Cart button below image without buttons appearing when hovering over it, for a clean view for the purpose of this test.
 
 ```
-<svg><use xlink:href="#icon-svgFileName" /></svg>
+{{#if add_to_cart_url }}
+<a href="{{add_to_cart_url}}" data-event-type="product-click" data-product-id="{{id}}" class="button button--primary _prod_add_to_cart_">{{lang 'products.add_to_cart'}}</a>
+{{/if}}
+```	
+### Add Item to Cart Button
 ```
+.../templates/pages/category.html
+```
+Added this following code to only show if the category is **"Special Items"**.  This code also shows the **"Remove All Items"** button, and each success notifications.
+```
+{{#if category.name '===' 'Special Items'}}
 
-The ID of the SVG icon you are calling is based on the filename of the icon you want,
-with `icon-` prepended. e.g. `xlink:href="#icon-facebook"`.
+    <div class="add_all_to_cart_container">
+      <button type="button" class="add_all_button">Add All To Cart</button>
+      <button type="button" class="remove_all_button" style="display:none;">Remove All Items</button>
+    </div>
 
-Simply add your new icon SVG file to the icons folder, and run `grunt svgstore`,
-or just `grunt`.
+    <div class="success_add_all" style="display:none;">
+      <p>All products in this category have been added to your cart.</p>
+    </div>
 
-#### License
+    <div class="success_remove_all" style="display:none;">
+      <p>All products in your cart have been removed.</p>
+    </div>
 
-(The MIT License)
-Copyright (C) 2015-present BigCommerce Inc.
-All rights reserved.
+{{/if}}
+```
+In the next file, **category.js**, the following code was added.
+```
+.../assets/js/theme/category.js
+```
+These script functions added:
+```
+function createCart(url, cartItems) {
+   return fetch(url, {
+       method: "POST",
+       credentials: "same-origin",
+       headers: {
+           "Content-Type": "application/json"},
+       body: JSON.stringify(cartItems),
+   })
+   .then(response => response.json());
+ };
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+function getCart(url) {
+   return fetch(url, {
+       method: "GET",
+       credentials: "same-origin"
+   })
+   .then(response => response.json());
+};
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+function deleteCartItem(url, cartId, itemId) {
+   return fetch(url + cartId + '/items/' + itemId, {
+       method: "DELETE",
+       credentials: "same-origin",
+       headers: {
+           "Content-Type": "application/json",}
+})
+.then(response => response.json());
+};
+```
+Then this code added to always show **"Remove All Items"** button if page reloads.
+```
+$(document).ready(function() {
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  getCart('/api/storefront/carts?include=lineItems.digitalItems.options,lineItems.physicalItems.options')
+    .then(data => console.log(JSON.stringify(data)))
+    .catch(error => console.error(error));
+
+  if ($(".cart-quantity").hasClass("countPill--positive")) {
+    $(".remove_all_button").show();
+    console.log('cart is not empty, show the remove all button');
+  } else {
+    console.log('cart is empty, or not refreshed to show');
+  }
+
+}); // end doc ready function
+```
+This following code refers to the function **'createCart'** to create the cart and add the items references in the lineitems when the **"Add All To Cart"** button is clicked.  It also shows the **success notification**, as well as the **"Remove All Items"** button. 
+```
+$(".add_all_button").click(function() {
+
+  createCart("/api/storefront/carts", {
+     "lineItems": [
+     {
+         "quantity": 1,
+         "productId": 112
+     }
+     ]}
+  )
+  .then(data => console.log(JSON.stringify(data)))
+  .catch(error => console.error(error));
+
+  getCart('/api/storefront/carts?include=lineItems.digitalItems.options,lineItems.physicalItems.options')
+    .then(data => console.log(JSON.stringify(data)))
+    .catch(error => console.error(error));
+
+  $(".success_add_all").show();
+  $(".remove_all_button").show();
+
+});  // click add all Button
+```
+### Delete Cart Items Button
+The buttons and notification html for this are shown above.  The code below was added for the objective to delete all items in the cart.  I ran into a roadblock which I will describe below.
+```
+$(".remove_all_button").click(function() {
+
+  getCart('/api/storefront/carts?include=lineItems.digitalItems.options,lineItems.physicalItems.options')
+    .then(data => console.log(JSON.stringify(data)))
+    .catch(error => console.error(error));
+
+  deleteCartItems("/api/storefront/carts?include=lineItems.physicalItems.id") // doesn't work yet
+  .then(data => console.log(JSON.stringify(data)))
+  .catch(error => console.log(error));
+
+  $(".success_remove_all").show();
+  $(".success_add_all").hide();
+  $(".remove_all_button").hide();
+
+});  // click remove all button
+```
+The part above that mentions **"// doesn't work yet"** I am still trying to understand better.  This will be something awesome to learn.
+
+_I'm sure it's an easy thing and when I do learn I might face palm.  **LOL**_
+
+The code below is the base.  The 'url' is '/api/storefront/carts', but I am trying to figure out how to reference the dynamic **'cartId'** and 
+**'itemId'** here.
+```
+function deleteCartItem(url, cartId, itemId) {
+   return fetch(url + cartId + '/items/' + itemId, {
+       method: "DELETE",
+       credentials: "same-origin",
+       headers: {
+           "Content-Type": "application/json",}
+})
+.then(response => response.json());
+};
+```
+This code can obtain the cardId, but the var can't be used in the code above.  Also, I can't seem to figure out how to pull in the itemId.  I look forward to learning more about this!!!
+
+### Bonus Customer Info
+For this test, adding a bar of customer info at the top of the category page, I did the following to make the header changes only appear on the category page.
+
+* In the layout folder, duplicated **base.html** and named it **category.html***
+
+* In the .../components/common/ folder, duplicated **header.html** and name it **categoryheader.html***
+
+In the new .../layout/category.html file I changed the following code to reference the new categoryheader.html:
+```
+Original:
+{{> components/common/header }}
+
+Changed to:
+{{> components/common/categoryheader }}
+```
+In the file .../templates/pages/category.html I changed the following code to refernce the new layout base called category.html
+```
+Original:
+{{> layout/base}}
+
+Changed to:
+{{> layout/category}}
+```
+In the new .../components/common/categoryheader.html file I added this code:
+```
+{{#if customer}}
+
+    <div class="cci_wrap" style="display:none;">
+      <div class="category_customer_info">
+
+        <div class="cci_item">
+        <i class="fas fa-user-circle"></i>
+        {{customer.name}}
+        </div>
+
+        <div class="cci_item">
+        <i class="fas fa-at"></i>
+        {{customer.email}}
+        </div>
+
+        <div class="cci_item">
+        <i class="fas fa-mobile-alt"></i>
+        {{customer.phone}}
+        </div>
+
+      </div><!-- end .category_custom_info -->
+    </div><!-- end cci_wrap -->
+
+    {{/if}}
+```
+The inline display:none is set to only show min-width of 801px.  For this test, I wasn't going to change the mobile structure of the header.  So doing this just shows it on desktop.  I added fontawesome icons.  I used the @ symbol icon because it isn't a link like mailto:
