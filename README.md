@@ -24,7 +24,7 @@ Create a product called 'Special Item' which will be assigned to a new category 
 
 3. If the cart has an item in it - show a button next to the **'Add All To Cart'** button which says **'Remove All Items'**. When clicked it should clear the cart and notify the user.
 
-Note: Both buttons should utilize the Storefront API for completion.
+**Note:** Both buttons should utilize the Storefront API for completion.
 
 4. **Bonus.** If a customer is logged in - at the top of the category page show a banner that shows some customer details **(name, email, and phone)**. This should utilize the data that is rendered via Handlebars on the Customer Object.
 
