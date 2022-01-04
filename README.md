@@ -6,7 +6,7 @@ Bigcommerce Code Test
 * [Test Questions](#test-questions)
 * [Notes](#notes)
 	* [Product Image Hover](#product-image-hover)
-	* [Add Item to Cart Button](#add-items-to-cart-button)
+	* [Add Item to Cart Button](#add-item-to-cart-button)
 	* [Delete Cart Items Button](#delete-cart-items-button)
 	* [Bonus Customer Info](#bonus-customer-info)
 
