@@ -1,0 +1,95 @@
+---
+category:
+    shop_by_price: true
+    products:
+        limit: {{theme_settings.categorypage_products_per_page}}
+---
+{{inject "categoryProductsPerPage" theme_settings.categorypage_products_per_page}}
+{{inject "categoryId" category.id}}
+{{#partial "head"}}
+    {{#if pagination.category.previous}}
+        <link rel="prev" href="{{pagination.category.previous}}">
+    {{/if}}
+    {{#if pagination.category.next}}
+        <link rel="next" href="{{pagination.category.next}}">
+    {{/if}}
+{{/partial}}
+
+{{#partial "page"}}
+
+{{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+{{#if category.image}}
+    {{> components/common/responsive-img
+        image=category.image
+        fallback_size=theme_settings.zoom_size
+        lazyload=theme_settings.lazyload_mode
+        class="category-header-image"
+    }}
+{{/if}}
+{{#unless theme_settings.hide_category_page_heading }}
+    <h1 class="page-heading">{{category.name}}</h1>
+    {{{region name="category_below_header"}}}
+{{/unless}}
+{{{category.description}}}
+<div class="page">
+    {{#if category.faceted_search_enabled}}
+        <aside class="page-sidebar" id="faceted-search-container">
+            {{> components/category/sidebar}}
+        </aside>
+    {{else if category.subcategories}}
+        <aside class="page-sidebar" id="faceted-search-container">
+            {{> components/category/sidebar}}
+        </aside>
+    {{else if category.shop_by_price}}
+        {{#if theme_settings.shop_by_price_visibility}}
+             <aside class="page-sidebar" id="faceted-search-container">
+                {{> components/category/sidebar}}
+            </aside>
+        {{/if}}
+    {{/if}}
+
+    <div class="page-content" id="product-listing-container">
+
+        <!-- custom Add All To Cart Button area -->
+
+            {{#if category.name '===' 'Special Items'}}
+
+            <div class="add_all_to_cart_container">
+              <button type="button" class="add_all_button">Add All To Cart</button>
+              <button type="button" class="remove_all_button" style="display:none;">Remove All Items</button>
+            </div>
+
+            <div class="success_add_all" style="display:none;">
+              <p>All products in this category have been added to your cart.</p>
+            </div>
+
+            <div class="success_remove_all" style="display:none;">
+              <p>All products in your cart have been removed.</p>
+            </div>
+
+            {{/if}}
+
+            <script>
+
+            $(document).ready(function() {
+
+              // testing pulling in handlebars code, of product id, added to card ahref
+              var productidval = $("._prod_add_to_cart_").attr("data-product-id");
+              console.log("product id:", productidval); // works
+
+              var mycartid = "{{cart_id}}";
+              console.log("cart id:", mycartid); // dynamic card id number, eg 86fa1fe1-5d43-45a9-a4d1-3ec0f9f8fed7
+
+            }); // end doc ready
+
+            </script>
+
+          <!-- end -->
+
+        {{> components/category/product-listing}}
+        {{{region name="category_below_content"}}}
+    </div>
+</div>
+
+{{/partial}}
+{{> layout/category}}

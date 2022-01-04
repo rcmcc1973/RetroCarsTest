@@ -1,0 +1,113 @@
+/* custom scss file
+ * that can over-write other css properties
+ * if imported at bottom of theme.scss
+ * [at]import "custom";
+*/
+
+.add_all_to_cart_container {
+  background-color: #eee;
+  padding: 10px 10px 0 10px;
+}
+
+.add_all_button {
+  background-color: orange;
+  padding: 10px 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  transition: all .3s;
+  &:hover {
+    background-color: black;
+    color: #fff;
+    transition: all .3s;
+  }
+}
+
+.remove_all_button {
+  background-color: #ccc;
+  color: black;
+  padding: 10px 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  transition: all .3s;
+  &:hover {
+    background-color: #777;
+    color: #fff;
+    transition: all .3s;
+  }
+}
+
+.success_add_all,
+.success_remove_all {
+  padding: 10px 10px 10px 20px;
+  position: relative;
+  background-color: #a5ebab;
+  &::before {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    width: 5px;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: #65c96d;
+    z-index: 100;
+  }
+  p {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.category_customer_info {
+  background-color: #444;
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-content: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+  .cci_item {
+    color: #fff;
+    padding-right: 30px;
+    i {
+      color: #fff;
+      margin-right: 5px;
+    }
+  }
+}
+
+
+@media (min-width: 801px) {
+
+  .cci_wrap {
+    display: block !important;
+  }
+
+}
+
+/*
+@media all (min-width: 801px) {
+
+.cci_wrap {
+  display: block !important;
+}
+
+.category_customer_info {
+  background-color: #999;
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-content: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+  .cci_item {
+    color: #fff;
+    padding-right: 30px;
+    i {
+      color: #fff;
+      margin-right: 5px;
+    }
+  }
+}*/
+
+/* } */ // end min 801
