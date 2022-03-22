@@ -25,7 +25,7 @@ Create a product called 'Special Item' which will be assigned to a new category 
 
 **Note:** Button should utilize the Storefront API for completion.
 
-4. **Bonus.** If a customer is logged in - at the top of the category page show a banner that shows some customer details **(name, email, and phone)**. This should utilize the data that is rendered via Handlebars on the Customer Object.
+3. **Bonus.** If a customer is logged in - at the top of the category page show a banner that shows some customer details **(name, email, and phone)**. This should utilize the data that is rendered via Handlebars on the Customer Object.
 
 	
 ## Notes
