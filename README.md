@@ -7,7 +7,6 @@ Bigcommerce Code Test
 * [Notes](#notes)
 	* [Product Image Hover](#product-image-hover)
 	* [Add Item to Cart Button](#add-item-to-cart-button)
-	* [Delete Cart Items Button](#delete-cart-items-button)
 	* [Bonus Customer Info](#bonus-customer-info)
 
 ## Summary
@@ -159,43 +158,6 @@ $(".add_all_button").click(function() {
 
 });  // click add all Button
 ```
-### Delete Cart Items Button
-The buttons and notification html for this are shown above.  The code below was added for the objective to delete all items in the cart.  I ran into a roadblock which I will describe below.
-```
-$(".remove_all_button").click(function() {
-
-  getCart('/api/storefront/carts?include=lineItems.digitalItems.options,lineItems.physicalItems.options')
-    .then(data => console.log(JSON.stringify(data)))
-    .catch(error => console.error(error));
-
-  deleteCartItems("/api/storefront/carts?include=lineItems.physicalItems.id") // doesn't work yet
-  .then(data => console.log(JSON.stringify(data)))
-  .catch(error => console.log(error));
-
-  $(".success_remove_all").show();
-  $(".success_add_all").hide();
-  $(".remove_all_button").hide();
-
-});  // click remove all button
-```
-The part above that mentions **"// doesn't work yet"** I am still trying to understand better.  This will be something awesome to learn.
-
-_I'm sure it's an easy thing and when I do learn I might face palm.  **LOL**_
-
-The code below is the base.  The 'url' is '/api/storefront/carts', but I am trying to figure out how to reference the dynamic **'cartId'** and 
-**'itemId'** here.
-```
-function deleteCartItem(url, cartId, itemId) {
-   return fetch(url + cartId + '/items/' + itemId, {
-       method: "DELETE",
-       credentials: "same-origin",
-       headers: {
-           "Content-Type": "application/json",}
-})
-.then(response => response.json());
-};
-```
-This code can obtain the cardId, but the var can't be used in the code above.  Also, I can't seem to figure out how to pull in the itemId.  I look forward to learning more about this!!!
 
 ### Bonus Customer Info
 For this test, adding a bar of customer info at the top of the category page, I did the following to make the header changes only appear on the category page.
